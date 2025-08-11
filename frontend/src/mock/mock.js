@@ -12,8 +12,8 @@ export const portfolioMock = {
     ],
   },
   skills: {
-    web: ["HTML", "CSS", "JavaScript (learning)"];
-    music: ["Keyboard", "Piano", "Guitar (learning)", "Composition (learning)"];
+    web: ["HTML", "CSS", "JavaScript (learning)"],
+    music: ["Keyboard", "Piano", "Guitar (learning)", "Composition (learning)"],
     interests: ["AI/ML", "Archaeology", "Story Writing", "Math Puzzles"],
   },
   education: {
