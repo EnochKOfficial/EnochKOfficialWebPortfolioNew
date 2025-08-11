@@ -65,7 +65,7 @@ function Navbar({ active }) {
                   </SheetHeader>
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     {SECTIONS.map((s) => (
-                      <a key={s.id} href={`#${s.id}`} onClick={(e)=>{onClick(e,s.id); const el = document.querySelector('[data-state="open"]'); if(el) el.click();}} className={`nav-item w-full text-center ${active===s.id ? "active" : ""}`}>
+                      <a key={s.id} href={`#${s.id}`} onClick={(e)=>{onClick(e,s.id); const closeEl = document.querySelector('[data-state="open"]'); if(closeEl) closeEl.click();}} className={`nav-item w-full text-center ${active===s.id ? "active" : ""}`}>
                         {s.label}
                       </a>
                     ))}
@@ -108,10 +108,11 @@ function Hero() {
       <div className="abs-blur blur-1"></div>
       <div className="abs-blur blur-2"></div>
       <div className="abs-blur blur-3"></div>
-      <Particles count={26} />
+      <Particles count={30} />
+      <div className="particles-fade" aria-hidden="true"></div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 py-24 pb-40 md:pb-48 lg:pb-28">
+        <div className="hero-wrap grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div>
             <div className="uppercase text-xs text-zinc-400 tracking-[0.2em] mb-4">Portfolio</div>
             <h1 className="font-instrument text-5xl sm:text-6xl lg:text-7xl leading-[0.95] text-white animate-fadeIn">
@@ -124,10 +125,10 @@ function Hero() {
               Student at CMR National PU College — I build with HTML &amp; CSS, learning JavaScript. I compose music and explore mathematics, while dreaming of AI/ML and Archaeology.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a className="btn-primary" href="#projects" onClick={(e)=>{e.preventDefault();document.getElementById("projects")&&window.scrollTo({top: document.getElementById("projects").getBoundingClientRect().top + window.pageYOffset - 80, behavior:"smooth"});}}>
+              <a className="btn-primary" href="#projects" onClick={(e)=>{e.preventDefault();const el=document.getElementById("projects"); if(el){const y=el.getBoundingClientRect().top+window.pageYOffset-80; window.scrollTo({top:y,behavior:"smooth"});}}}>
                 Explore Projects
               </a>
-              <a className="btn-secondary" href="#contact" onClick={(e)=>{e.preventDefault();document.getElementById("contact")&&window.scrollTo({top: document.getElementById("contact").getBoundingClientRect().top + window.pageYOffset - 80, behavior:"smooth"});}}>
+              <a className="btn-secondary" href="#contact" onClick={(e)=>{e.preventDefault();const el=document.getElementById("contact"); if(el){const y=el.getBoundingClientRect().top+window.pageYOffset-80; window.scrollTo({top:y,behavior:"smooth"});}}}>
                 Contact Me
               </a>
             </div>
@@ -234,6 +235,7 @@ function WritingSection() {
   const { writing } = portfolioMock;
   return (
     <section id="writing" className="section">
+      <div className="section-decor bg-writing" aria-hidden="true"></div>
       <SectionHeading icon={Book} title="Writing" subtitle="Works in progress" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {writing.worksInProgress.map((w) => (
@@ -256,6 +258,7 @@ function EducationSection() {
   const { education } = portfolioMock;
   return (
     <section id="education" className="section">
+      <div className="section-decor bg-education" aria-hidden="true"></div>
       <SectionHeading icon={GraduationCap} title="Education" subtitle="Current" />
       <Card className="bg-[#0f0f14]/60 border-[#7c3aed]/30">
         <CardContent className="pt-6 text-zinc-300">

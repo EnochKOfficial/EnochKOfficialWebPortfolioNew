@@ -36,12 +36,15 @@ html { scroll-behavior: smooth; }
 .blur-2 { width: 300px; height: 300px; background: radial-gradient(closest-side, rgba(168,85,247,0.4), transparent); bottom: 10%; right: 10%; animation: float2 11s ease-in-out infinite; }
 .blur-3 { width: 220px; height: 220px; background: radial-gradient(closest-side, rgba(147,51,234,0.35), transparent); top: 20%; right: 35%; animation: float3 13s ease-in-out infinite; }
 
+/* Fade the particle canvas near edges to avoid abrupt end */
+.particles-fade { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(100% 60% at 50% 110%, rgba(0,0,0,0.85), rgba(0,0,0,0) 60%), linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,0.85) 100%); }
+
 @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(12px) } }
 @keyframes float2 { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-14px) } }
 @keyframes float3 { 0%, 100% { transform: translateX(0) } 50% { transform: translateX(16px) } }
 
 /* Ribbon */
-.hero-ribbon { position: absolute; bottom: 8%; left: -10%; right: -10%; height: 44px; background: rgba(124,58,237,0.2); color: #e9e1ff; display: flex; align-items: center; justify-content: center; transform: rotate(-2.5deg); border-top: 1px solid rgba(124,58,237,0.35); border-bottom: 1px solid rgba(124,58,237,0.35); text-transform: uppercase; font-weight: 600; letter-spacing: 0.16em; }
+.hero-ribbon { position: absolute; bottom: 8%; left: -10%; right: -10%; height: 44px; background: rgba(124,58,237,0.2); color: #e9e1ff; display: flex; align-items: center; justify-content: center; transform: rotate(-2.5deg); border-top: 1px solid rgba(124,58,237,0.35); border-bottom: 1px solid rgba(124,58,237,0.35); text-transform: uppercase; font-weight: 600; letter-spacing: 0.16em; z-index: 0; }
 
 /* Subtle fade in and phrase cycle */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -50,12 +53,27 @@ html { scroll-behavior: smooth; }
 .fade-cycle { animation: cycle 2.2s ease-in-out infinite; }
 
 /* Section decorative overlays */
-.section-decor { position: absolute; inset: 0; pointer-events: none; opacity: 0.12; }
+.section-decor { position: absolute; inset: 0; pointer-events: none; opacity: 0.10; }
 .bg-math { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'><g fill='none' stroke='%237c3aed' stroke-width='1'><text x='20' y='80' font-family='serif' font-size='28'>E=mc^2 ∑ i=1^n i = n(n+1)/2</text><text x='40' y='160' font-family='serif' font-size='24'>e^{iπ}+1=0  ∫ x^2 dx</text><text x='80' y='240' font-family='serif' font-size='28'>a^2+b^2=c^2  lim→∞</text><text x='20' y='340' font-family='serif' font-size='24'>π ≈ 3.14159  φ=(1+√5)/2</text><text x='60' y='420' font-family='serif' font-size='28'>(x−μ)/σ  ∂/∂x</text><text x='100' y='520' font-family='serif' font-size='24'>ln(x)  ∑  ∫  √  Δ</text></g></svg>"); background-size: 600px 600px; animation: driftDown 30s linear infinite; }
-.bg-music { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'><g fill='none' stroke='%237c3aed' stroke-width='1'><rect x='40' y='60' width='520' height='80' rx='8'/><g stroke-width='3'> <line x1='60' y1='60' x2='60' y2='140'/><line x1='100' y1='60' x2='100' y2='140'/><line x1='140' y1='60' x2='140' y2='140'/><line x1='220' y1='60' x2='220' y2='140'/><line x1='260' y1='60' x2='260' y2='140'/><line x1='300' y1='60' x2='300' y2='140'/></g><path d='M120,280 q60,-40 120,0 t120,0' /><circle cx='430' cy='270' r='12'/><path d='M430,270 v80 q40,20 60,0 v-80' /></g></svg>"); background-size: 600px 600px; animation: driftDown 40s linear infinite; }
+
+/* Slanted guitar outline with low opacity for Music */
+.bg-music { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='700' height='700' viewBox='0 0 700 700'><g fill='none' stroke='%237c3aed' stroke-width='2' transform='rotate(-18 350 350)'><path d='M540 210 l60 -60 m-40 40 l-30 30' stroke-width='6'/><circle cx='560' cy='190' r='10' stroke-width='3'/><path d='M210 420 c60 -50 120 -40 150 -20 s40 80 -10 120 s-120 40 -150 20 s-40 -80 10 -120 z' /><path d='M360 350 l180 -180' /><path d='M355 345 l190 -190' stroke-dasharray='6 6'/><circle cx='310' cy='430' r='28'/><path d='M332 430 h120' /><path d='M310 402 v56' /></g></svg>"); background-size: 700px 700px; animation: driftDown 40s linear infinite; }
+
+/* Writing overlay: quill + paper lines */
+.bg-writing { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='700' height='700' viewBox='0 0 700 700'><g fill='none' stroke='%237c3aed' stroke-width='1.4'><path d='M120 180 q60 -80 160 -80 q-40 40 -40 80 q80 -40 160 -40 q-60 60 -80 140 q-100 0 -160 -100 z' /><line x1='380' y1='300' x2='620' y2='300' /><line x1='380' y1='340' x2='620' y2='340' /><line x1='380' y1='380' x2='620' y2='380' /><line x1='380' y1='420' x2='620' y2='420' /></g></svg>"); background-size: 700px 700px; animation: driftDown 36s linear infinite; }
+
+/* Education overlay: graduation cap and diploma scroll */
+.bg-education { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='700' height='700' viewBox='0 0 700 700'><g fill='none' stroke='%237c3aed' stroke-width='1.6'><path d='M160 240 l180 -60 l180 60 l-180 60 z' /><path d='M340 300 v80' /><rect x='240' y='380' width='200' height='18' rx='9'/><rect x='460' y='410' width='120' height='40' rx='20'/><line x1='480' y1='430' x2='540' y2='430' stroke-width='3'/></g></svg>"); background-size: 700px 700px; animation: driftDown 42s linear infinite; }
+
 @keyframes driftDown { 0% { transform: translateY(-10%); } 100% { transform: translateY(10%); } }
 
-/* Responsive tweaks */
+/* Responsive tweaks for tablet to avoid ribbon collision */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .hero-ribbon { bottom: 2%; height: 36px; }
+  .hero-wrap { padding-bottom: 88px; }
+}
+
+/* Mobile tweaks */
 @media (max-width: 767px) {
-  .hero-ribbon { height: 38px; bottom: 6%; }
+  .hero-ribbon { height: 34px; bottom: 6%; }
 }
