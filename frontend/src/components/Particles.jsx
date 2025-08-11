@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Particles({ count = 18, colors = ["rgba(124,58,237,0.25)", "rgba(168,85,247,0.18)"] }) {
+export default function Particles({ count = 24, colors = ["rgba(124,58,237,0.25)", "rgba(168,85,247,0.18)"] }) {
   const ref = React.useRef(null);
   const rafRef = React.useRef();
 
@@ -21,16 +21,19 @@ export default function Particles({ count = 18, colors = ["rgba(124,58,237,0.25)
     const dots = Array.from({ length: count }).map(() => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      r: 40 + Math.random() * 90,
-      vx: (Math.random() - 0.5) * 0.2,
-      vy: (Math.random() - 0.5) * 0.2,
+      r: 60 + Math.random() * 110,
+      vx: (Math.random() - 0.5) * 0.6, // faster to feel alive
+      vy: (Math.random() - 0.5) * 0.6,
+      drift: Math.random() * Math.PI * 2,
       c: colors[Math.floor(Math.random() * colors.length)],
     }));
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
-      dots.forEach((d) => {
-        d.x += d.vx; d.y += d.vy;
+      dots.forEach((d, i) => {
+        d.drift += 0.005 + i * 0.0001;
+        d.x += d.vx + Math.cos(d.drift) * 0.2;
+        d.y += d.vy + Math.sin(d.drift) * 0.2;
         if (d.x < -d.r) d.x = width + d.r;
         if (d.x > width + d.r) d.x = -d.r;
         if (d.y < -d.r) d.y = height + d.r;

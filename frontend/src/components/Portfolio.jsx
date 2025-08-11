@@ -6,7 +6,8 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Badge } from "../components/ui/badge";
 import { useToast } from "../hooks/use-toast";
-import { Music, Book, Code2, GraduationCap, Send, ChevronRight, Hash } from "lucide-react";
+import { Music, Book, Code2, GraduationCap, Send, ChevronRight, Hash, Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "../components/ui/sheet";
 import "../styles/portfolio.css";
 import useScrollSpy from "../hooks/useScrollSpy";
 import Particles from "./Particles";
@@ -21,18 +22,26 @@ const SECTIONS = [
 ];
 
 function Navbar({ active }) {
+  const scrollToId = (id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 80; // offset for sticky nav
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
   const onClick = (e, id) => {
     e.preventDefault();
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToId(id);
   };
+
   return (
     <div className="sticky top-4 z-40">
       <div className="mx-auto max-w-6xl px-4">
-        <nav className="nav-pill bg-[#0b0b0f]/80 backdrop-blur-md border border-[#7c3aed]/40 rounded-[22px] px-2 py-1 shadow-[0_0_40px_rgba(124,58,237,0.25)]">
+        <nav className="nav-rect bg-[#0b0b0f]/80 backdrop-blur-md border border-[#7c3aed]/40 rounded-[16px] px-2 py-1 shadow-[0_0_36px_rgba(124,58,237,0.22)]">
           <ul className="flex items-center justify-between gap-1 text-sm text-zinc-200">
             <li className="px-3 py-2 font-semibold tracking-wide text-white">Enoch K.</li>
-            <div className="flex items-center gap-1 overflow-x-auto">
+
+            {/* Desktop links */}
+            <div className="hidden md:flex items-center gap-1">
               {SECTIONS.map((s) => (
                 <li key={s.id}>
                   <a href={`#${s.id}`} onClick={(e)=>onClick(e, s.id)} className={`nav-item ${active===s.id ? "active" : ""}`}>
@@ -41,7 +50,31 @@ function Navbar({ active }) {
                 </li>
               ))}
             </div>
-            <li>
+
+            {/* Mobile menu */}
+            <div className="md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button aria-label="Open menu" className="hamburger">
+                    <Menu size={18} />
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="top" className="sheet-dark">
+                  <SheetHeader>
+                    <SheetTitle className="text-white">Navigate</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    {SECTIONS.map((s) => (
+                      <a key={s.id} href={`#${s.id}`} onClick={(e)=>{onClick(e,s.id); const el = document.querySelector('[data-state="open"]'); if(el) el.click();}} className={`nav-item w-full text-center ${active===s.id ? "active" : ""}`}>
+                        {s.label}
+                      </a>
+                    ))}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+
+            <li className="hidden md:block">
               <a href="#contact" onClick={(e)=>onClick(e, "contact")} className="btn-ghost">
                 Say Hi
               </a>
@@ -71,11 +104,11 @@ function Hero() {
 
   return (
     <section className="relative min-h-[88vh] flex items-center bg-black text-zinc-200 overflow-hidden">
-      {/* Decorative blurred blobs */}
+      {/* Decorative blurred blobs + moving particles */}
       <div className="abs-blur blur-1"></div>
       <div className="abs-blur blur-2"></div>
       <div className="abs-blur blur-3"></div>
-      <Particles />
+      <Particles count={26} />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
@@ -84,14 +117,17 @@ function Hero() {
             <h1 className="font-instrument text-5xl sm:text-6xl lg:text-7xl leading-[0.95] text-white animate-fadeIn">
               Enoch K.
             </h1>
+            <div className="mt-3 text-sm text-zinc-400 flex items-center gap-2">
+              <Hash size={16}/> <span className="italic fade-cycle">{phrases[idx]}</span>
+            </div>
             <p className="text-zinc-300 mt-5 max-w-xl">
               Student at CMR National PU College — I build with HTML &amp; CSS, learning JavaScript. I compose music and explore mathematics, while dreaming of AI/ML and Archaeology.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a className="btn-primary" href="#projects" onClick={(e)=>{e.preventDefault();document.getElementById("projects")?.scrollIntoView({behavior:"smooth"});}}>
+              <a className="btn-primary" href="#projects" onClick={(e)=>{e.preventDefault();document.getElementById("projects")&&window.scrollTo({top: document.getElementById("projects").getBoundingClientRect().top + window.pageYOffset - 80, behavior:"smooth"});}}>
                 Explore Projects
               </a>
-              <a className="btn-secondary" href="#contact" onClick={(e)=>{e.preventDefault();document.getElementById("contact")?.scrollIntoView({behavior:"smooth"});}}>
+              <a className="btn-secondary" href="#contact" onClick={(e)=>{e.preventDefault();document.getElementById("contact")&&window.scrollTo({top: document.getElementById("contact").getBoundingClientRect().top + window.pageYOffset - 80, behavior:"smooth"});}}>
                 Contact Me
               </a>
             </div>
@@ -124,10 +160,6 @@ function Hero() {
             </Card>
           </div>
         </div>
-
-        <div className="mt-14 flex items-center gap-2 text-zinc-400 text-sm">
-          <Hash size={16}/> <span className="italic fade-cycle">{phrases[idx]}</span>
-        </div>
       </div>
 
       {/* Subtle ribbon */}
@@ -152,6 +184,7 @@ function ProjectsSection() {
   const { projects } = portfolioMock;
   return (
     <section id="projects" className="section">
+      <div className="section-decor bg-math" aria-hidden="true"></div>
       <SectionHeading icon={Code2} title="Projects &amp; Math Ideas" subtitle="Highlights" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {projects.map((p) => (
@@ -171,9 +204,9 @@ function ProjectsSection() {
                 ))}
               </div>
               <div>
-                <Button variant="ghost" className="text-[#cbb6ff] hover:text-white px-0">
+                <button className="read-link">
                   Read more <ChevronRight size={16} className="ml-1" />
-                </Button>
+                </button>
               </div>
             </CardContent>
           </Card>
@@ -186,6 +219,7 @@ function ProjectsSection() {
 function MusicSection() {
   return (
     <section id="music" className="section">
+      <div className="section-decor bg-music" aria-hidden="true"></div>
       <SectionHeading icon={Music} title="Music" subtitle="Interests" />
       <Card className="bg-[#0f0f14]/60 border-[#7c3aed]/30">
         <CardContent className="pt-6 text-zinc-300">

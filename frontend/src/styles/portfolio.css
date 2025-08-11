@@ -5,45 +5,30 @@ html { scroll-behavior: smooth; }
 .font-rethink { font-family: 'Rethink Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
 .font-instrument { font-family: 'Instrument Serif', Georgia, serif; }
 
-/* Buttons that match black/purple theme */
-.btn-primary {
-  background: #7c3aed; /* purple */
-  color: white;
-  border-radius: 9999px;
-  padding: 10px 16px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
-  box-shadow: 0 0 0 rgba(0,0,0,0);
-}
-.btn-primary:hover { background: #6d28d9; box-shadow: 0 10px 30px rgba(124,58,237,0.35); transform: translateY(-1px); }
-.btn-primary:active { transform: translateY(0); }
+/* Buttons */
+.btn-primary { background: #7c3aed; color: white; border-radius: 9999px; padding: 10px 16px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease; box-shadow: 0 0 0 rgba(0,0,0,0);} 
+.btn-primary:hover { background: #6d28d9; box-shadow: 0 10px 30px rgba(124,58,237,0.35); transform: translateY(-1px);} 
+.btn-primary:active { transform: translateY(0);} 
+.btn-secondary { color: #cbb6ff; border: 1px solid rgba(124,58,237,0.5); border-radius: 9999px; padding: 10px 16px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.15s ease;} 
+.btn-secondary:hover { background: rgba(124,58,237,0.12); color: white; transform: translateY(-1px);} 
 
-.btn-secondary {
-  color: #cbb6ff;
-  border: 1px solid rgba(124,58,237,0.5);
-  border-radius: 9999px;
-  padding: 10px 16px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
-}
-.btn-secondary:hover { background: rgba(124,58,237,0.12); color: white; transform: translateY(-1px); }
+/* Read more link */
+.read-link { color: #cbb6ff; padding: 6px 8px; border-radius: 10px; transition: background-color 0.2s ease, color 0.2s ease; display: inline-flex; align-items: center; }
+.read-link:hover { background: rgba(124,58,237,0.12); color: #ffffff; }
 
-/* Nav pill */
-.nav-pill { border-radius: 22px; }
-.nav-item { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 12px; color: #cbb6ff; transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease; }
+/* Navbar */
+.nav-rect { border-radius: 16px; }
+.nav-item { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 10px; color: #cbb6ff; transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease; }
 .nav-item:hover { color: white; background-color: rgba(124,58,237,0.12); }
 .nav-item.active { color: white; background: rgba(124,58,237,0.16); box-shadow: 0 0 0 1px rgba(124,58,237,0.45) inset, 0 0 24px rgba(124,58,237,0.25); }
 .btn-ghost { display: inline-flex; padding: 8px 12px; border-radius: 12px; color: #cbb6ff; border: 1px solid rgba(124,58,237,0.4); }
 .btn-ghost:hover { background: rgba(124,58,237,0.12); color: white; }
+.hamburger { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; border: 1px solid rgba(124,58,237,0.45); color: #cbb6ff; background: rgba(124,58,237,0.08); }
+.hamburger:hover { background: rgba(124,58,237,0.16); color: #fff; }
+.sheet-dark { background: #0b0b0f; border-bottom: 1px solid rgba(124,58,237,0.3); }
 
 /* Sections */
-.section { padding: 64px 0; }
+.section { position: relative; overflow: hidden; padding: 64px 0; }
 
 /* Hero decorations */
 .abs-blur { position: absolute; filter: blur(70px); opacity: 0.6; pointer-events: none; }
@@ -56,18 +41,21 @@ html { scroll-behavior: smooth; }
 @keyframes float3 { 0%, 100% { transform: translateX(0) } 50% { transform: translateX(16px) } }
 
 /* Ribbon */
-.hero-ribbon {
-  position: absolute; bottom: 8%; left: -10%; right: -10%;
-  height: 44px; background: rgba(124,58,237,0.2); color: #e9e1ff;
-  display: flex; align-items: center; justify-content: center;
-  transform: rotate(-2.5deg);
-  border-top: 1px solid rgba(124,58,237,0.35);
-  border-bottom: 1px solid rgba(124,58,237,0.35);
-  text-transform: uppercase; font-weight: 600; letter-spacing: 0.16em;
-}
+.hero-ribbon { position: absolute; bottom: 8%; left: -10%; right: -10%; height: 44px; background: rgba(124,58,237,0.2); color: #e9e1ff; display: flex; align-items: center; justify-content: center; transform: rotate(-2.5deg); border-top: 1px solid rgba(124,58,237,0.35); border-bottom: 1px solid rgba(124,58,237,0.35); text-transform: uppercase; font-weight: 600; letter-spacing: 0.16em; }
 
 /* Subtle fade in and phrase cycle */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 .animate-fadeIn { animation: fadeIn 700ms ease both; }
 @keyframes cycle { 0%,100% { opacity: 0.3 } 50% { opacity: 1 } }
 .fade-cycle { animation: cycle 2.2s ease-in-out infinite; }
+
+/* Section decorative overlays */
+.section-decor { position: absolute; inset: 0; pointer-events: none; opacity: 0.12; }
+.bg-math { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'><g fill='none' stroke='%237c3aed' stroke-width='1'><text x='20' y='80' font-family='serif' font-size='28'>E=mc^2 ∑ i=1^n i = n(n+1)/2</text><text x='40' y='160' font-family='serif' font-size='24'>e^{iπ}+1=0  ∫ x^2 dx</text><text x='80' y='240' font-family='serif' font-size='28'>a^2+b^2=c^2  lim→∞</text><text x='20' y='340' font-family='serif' font-size='24'>π ≈ 3.14159  φ=(1+√5)/2</text><text x='60' y='420' font-family='serif' font-size='28'>(x−μ)/σ  ∂/∂x</text><text x='100' y='520' font-family='serif' font-size='24'>ln(x)  ∑  ∫  √  Δ</text></g></svg>"); background-size: 600px 600px; animation: driftDown 30s linear infinite; }
+.bg-music { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'><g fill='none' stroke='%237c3aed' stroke-width='1'><rect x='40' y='60' width='520' height='80' rx='8'/><g stroke-width='3'> <line x1='60' y1='60' x2='60' y2='140'/><line x1='100' y1='60' x2='100' y2='140'/><line x1='140' y1='60' x2='140' y2='140'/><line x1='220' y1='60' x2='220' y2='140'/><line x1='260' y1='60' x2='260' y2='140'/><line x1='300' y1='60' x2='300' y2='140'/></g><path d='M120,280 q60,-40 120,0 t120,0' /><circle cx='430' cy='270' r='12'/><path d='M430,270 v80 q40,20 60,0 v-80' /></g></svg>"); background-size: 600px 600px; animation: driftDown 40s linear infinite; }
+@keyframes driftDown { 0% { transform: translateY(-10%); } 100% { transform: translateY(10%); } }
+
+/* Responsive tweaks */
+@media (max-width: 767px) {
+  .hero-ribbon { height: 38px; bottom: 6%; }
+}
