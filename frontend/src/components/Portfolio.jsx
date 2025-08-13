@@ -313,16 +313,38 @@ function AboutSection() {
 function ContactSection() {
   const { toast } = useToast();
   const [form, setForm] = React.useState({ name: "", email: "", message: "" });
-  const onSubmit = (e) => {
+  const [submitting, setSubmitting] = React.useState(false);
+  const FORM_ENDPOINT = "https://formspree.io/f/xldlzqjr";
+
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
       toast({ title: "Missing info", description: "Please fill all fields", });
       return;
     }
-    saveMockMessage({ ...form });
-    toast({ title: "Saved (mock)", description: "Stored in your browser for now." });
-    setForm({ name: "", email: "", message: "" });
+    setSubmitting(true);
+    try {
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("email", form.email);
+      fd.append("message", form.message);
+      const res = await fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { Accept: "application/json" } });
+      if (res.ok) {
+        toast({ title: "Message sent", description: "Thanks! I will get back soon." });
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast({ title: "Send failed", description: data?.error || "Please try again later." });
+      }
+    } catch (err) {
+      // Fallback to local save if network blocked
+      saveMockMessage({ ...form });
+      toast({ title: "Saved locally", description: "Network issue; stored in your browser for now." });
+    } finally {
+      setSubmitting(false);
+    }
   };
+
   return (
     <section id="contact" className="section">
       <SectionHeading icon={Send} title="Contact" subtitle="Let\'s connect" />
@@ -342,14 +364,14 @@ function ContactSection() {
               <Textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Say hello 👋" className="bg-black/40 border-[#7c3aed]/30 focus-visible:ring-[#7c3aed] text-zinc-200 min-h-[120px]" />
             </div>
             <div className="md:col-span-2">
-              <Button type="submit" className="btn-primary !h-11 !px-5">
-                Send Message
+              <Button type="submit" disabled={submitting} className="btn-primary !h-11 !px-5">
+                {submitting ? "Sending..." : "Send Message"}
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
-      <p className="text-xs text-zinc-500 mt-3">Note: This is mocked for now and saves to your local browser storage.</p>
+      <p className="text-xs text-zinc-500 mt-3">Note: Form submits to Formspree. If network fails, it's saved locally.</p>
     </section>
   );
 }
