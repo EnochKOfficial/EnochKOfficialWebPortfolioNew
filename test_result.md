@@ -135,15 +135,18 @@
         comment: "✅ PASSED - Returns 200 with null when no profile exists. Schema is correct."
   - task: "GET /api/projects"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Returns Project[]; ok with empty array."
+      - working: true
+        agent: "testing"
+        comment: "✅ PASSED - Returns 200 with empty array [] when no projects exist. Schema is correct."
   - task: "GET /api/writing"
     implemented: true
     working: "NA"
