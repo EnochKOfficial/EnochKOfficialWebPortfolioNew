@@ -122,8 +122,13 @@ function Hero() {
               <Hash size={16}/> <span className="italic fade-cycle">{phrases[idx]}</span>
             </div>
             <p className="text-zinc-300 mt-5 max-w-xl">
-              Student at CMR National PU College — I build with HTML &amp; CSS, learning JavaScript. I compose music and explore mathematics, while dreaming of AI/ML and Archaeology.
+              Student at CMR National PU College — I build with HTML &amp; CSS, learning JavaScript, Python and SQL. I compose music and explore mathematics, while dreaming of AI/ML and Archaeology.
             </p>
+            <div className="mt-6 flex flex-wrap gap-2 text-xs text-zinc-400">
+              {portfolioMock.skills.web.map((s) => (
+                <span key={s} className="inline-flex items-center gap-1"><Code2 size={14}/> {s}</span>
+              ))}
+            </div>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className="btn-primary" href="#projects" onClick={(e)=>{e.preventDefault();const el=document.getElementById("projects"); if(el){const y=el.getBoundingClientRect().top+window.pageYOffset-80; window.scrollTo({top:y,behavior:"smooth"});}}}>
                 Explore Projects
@@ -131,13 +136,6 @@ function Hero() {
               <a className="btn-secondary" href="#contact" onClick={(e)=>{e.preventDefault();const el=document.getElementById("contact"); if(el){const y=el.getBoundingClientRect().top+window.pageYOffset-80; window.scrollTo({top:y,behavior:"smooth"});}}}>
                 Contact Me
               </a>
-            </div>
-            <div className="mt-6 flex flex-wrap gap-2 text-xs text-zinc-400">
-              <span className="inline-flex items-center gap-1"><Code2 size={14}/> HTML</span>
-              <span className="inline-flex items-center gap-1"><Code2 size={14}/> CSS</span>
-              <span className="inline-flex items-center gap-1"><Code2 size={14}/> JavaScript (learning)</span>
-              <span className="inline-flex items-center gap-1"><Music size={14}/> Piano &amp; Keyboard</span>
-              <span className="inline-flex items-center gap-1"><Book size={14}/> Writing ‘Tevel’</span>
             </div>
           </div>
 
@@ -220,7 +218,7 @@ function ProjectsSection() {
 function MusicSection() {
   return (
     <section id="music" className="section">
-      <div className="section-decor bg-music" aria-hidden="true"></div>
+      <div className="section-decor bg-music-notes" aria-hidden="true"></div>
       <SectionHeading icon={Music} title="Music" subtitle="Interests" />
       <Card className="bg-[#0f0f14]/60 border-[#7c3aed]/30">
         <CardContent className="pt-6 text-zinc-300">
@@ -235,7 +233,7 @@ function WritingSection() {
   const { writing } = portfolioMock;
   return (
     <section id="writing" className="section">
-      <div className="section-decor bg-writing" aria-hidden="true"></div>
+      <div className="section-decor bg-writing-letters" aria-hidden="true"></div>
       <SectionHeading icon={Book} title="Writing" subtitle="Works in progress" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {writing.worksInProgress.map((w) => (
@@ -258,7 +256,7 @@ function EducationSection() {
   const { education } = portfolioMock;
   return (
     <section id="education" className="section">
-      <div className="section-decor bg-education" aria-hidden="true"></div>
+      <div className="section-decor bg-education-caps" aria-hidden="true"></div>
       <SectionHeading icon={GraduationCap} title="Education" subtitle="Current" />
       <Card className="bg-[#0f0f14]/60 border-[#7c3aed]/30">
         <CardContent className="pt-6 text-zinc-300">
