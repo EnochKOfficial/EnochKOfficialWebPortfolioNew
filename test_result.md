@@ -121,15 +121,18 @@
         comment: "✅ PASSED - Returns 200 with {'message': 'Hello World'} as expected. Tested via external ingress URL."
   - task: "GET /api/profile"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Returns single profile or null when empty."
+      - working: true
+        agent: "testing"
+        comment: "✅ PASSED - Returns 200 with null when no profile exists. Schema is correct."
   - task: "GET /api/projects"
     implemented: true
     working: "NA"
