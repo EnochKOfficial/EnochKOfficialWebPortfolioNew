@@ -101,3 +101,126 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+## user_problem_statement: "Portfolio site with Mongo-backed data and Formspree+DB contact messages. Ensure all /api routes work via ingress and CORS is open."
+
+## backend:
+  - task: "GET /api/ (hello world)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Endpoint exists; need confirmation of 200 and message field."
+  - task: "GET /api/profile"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Returns single profile or null when empty."
+  - task: "GET /api/projects"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Returns Project[]; ok with empty array."
+  - task: "GET /api/writing"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Returns worksInProgress array; defaults to empty."
+  - task: "GET /api/education"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Returns current education or null."
+  - task: "POST /api/contact-messages (store copy)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Should accept {name,email,message}, return 201 and id."
+  - task: "GET /api/contact-messages (list)"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "List stored messages sorted by created_at desc."
+
+## frontend:
+  - task: "Integrate Formspree + DB copy in ContactSection"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Portfolio.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Form posts to Formspree then fire-and-forget DB copy; local fallback on network error."
+  - task: "Create API client and smooth-scroll nav"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/lib/api.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Smooth scroll with offset; axios client uses REACT_APP_BACKEND_URL."
+
+## metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+## test_plan:
+  current_focus:
+    - "Backend: verify all GET endpoints and POST /api/contact-messages"
+    - "CORS works via http://localhost:3000/api routing"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+## agent_communication:
+  - agent: "main"
+    message: "Please test backend via http://localhost:3000/api (ingress redirects to 8001). Validate response schemas and status codes. For POST /api/contact-messages use a dummy payload and then GET to confirm persistence."
