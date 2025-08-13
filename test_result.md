@@ -149,15 +149,18 @@
         comment: "✅ PASSED - Returns 200 with empty array [] when no projects exist. Schema is correct."
   - task: "GET /api/writing"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Returns worksInProgress array; defaults to empty."
+      - working: true
+        agent: "testing"
+        comment: "✅ PASSED - Returns 200 with {'worksInProgress': []} when no writing exists. Schema is correct."
   - task: "GET /api/education"
     implemented: true
     working: "NA"
