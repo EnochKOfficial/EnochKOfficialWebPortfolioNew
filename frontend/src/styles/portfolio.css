@@ -28,7 +28,10 @@ html { scroll-behavior: smooth; }
 .sheet-dark { background: #0b0b0f; border-bottom: 1px solid rgba(124,58,237,0.3); }
 
 /* Sections */
-.section { position: relative; overflow: hidden; padding: 64px 0; }
+.section { position: relative; overflow: hidden; padding: 64px 0; scroll-margin-top: 96px; }
+@media (max-width: 767px) {
+  .section { scroll-margin-top: 84px; }
+}
 
 /* Hero decorations */
 .abs-blur { position: absolute; filter: blur(70px); opacity: 0.6; pointer-events: none; }
