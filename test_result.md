@@ -107,15 +107,18 @@
 ## backend:
   - task: "GET /api/ (hello world)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Endpoint exists; need confirmation of 200 and message field."
+      - working: true
+        agent: "testing"
+        comment: "✅ PASSED - Returns 200 with {'message': 'Hello World'} as expected. Tested via external ingress URL."
   - task: "GET /api/profile"
     implemented: true
     working: "NA"
