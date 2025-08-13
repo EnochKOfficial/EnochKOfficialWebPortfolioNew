@@ -177,15 +177,18 @@
         comment: "✅ PASSED - Returns 200 with {'current': None} when no education exists. Schema is correct."
   - task: "POST /api/contact-messages (store copy)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Should accept {name,email,message}, return 201 and id."
+      - working: true
+        agent: "testing"
+        comment: "✅ PASSED - Accepts {name,email,message} payload, returns 201 with {id: uuid}. Data persisted correctly."
   - task: "GET /api/contact-messages (list)"
     implemented: true
     working: "NA"
