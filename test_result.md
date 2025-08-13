@@ -245,3 +245,5 @@
 ## agent_communication:
   - agent: "main"
     message: "Please test backend via http://localhost:3000/api (ingress redirects to 8001). Validate response schemas and status codes. For POST /api/contact-messages use a dummy payload and then GET to confirm persistence."
+  - agent: "testing"
+    message: "✅ ALL BACKEND TESTS PASSED! Tested all 6 endpoints via external ingress URL. Note: localhost:3000/api routing not working (returns frontend HTML), but external URL works perfectly. All endpoints return correct status codes and schemas. CORS is working. DB collections handle empty states correctly with sensible defaults. Contact message POST/GET cycle works with proper persistence and field validation."
