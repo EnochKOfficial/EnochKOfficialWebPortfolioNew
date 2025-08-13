@@ -191,15 +191,18 @@
         comment: "✅ PASSED - Accepts {name,email,message} payload, returns 201 with {id: uuid}. Data persisted correctly."
   - task: "GET /api/contact-messages (list)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "List stored messages sorted by created_at desc."
+      - working: true
+        agent: "testing"
+        comment: "✅ PASSED - Returns 200 with array of contact messages. Includes all required fields (id, name, email, message, created_at). Sorting by created_at desc works correctly."
 
 ## frontend:
   - task: "Integrate Formspree + DB copy in ContactSection"
