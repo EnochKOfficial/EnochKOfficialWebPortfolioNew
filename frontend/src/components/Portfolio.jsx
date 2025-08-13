@@ -26,8 +26,17 @@ function Navbar({ active }) {
   const scrollToId = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
-    const y = el.getBoundingClientRect().top + window.pageYOffset - 80; // offset for sticky nav
-    window.scrollTo({ top: y, behavior: "smooth" });
+    try {
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 80; // offset for sticky nav
+      window.scrollTo({ top: y, behavior: "smooth" });
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, "", `#${id}`);
+      } else {
+        window.location.hash = `#${id}`;
+      }
+    } catch (_) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
   const onClick = (e, id) => {
     e.preventDefault();
