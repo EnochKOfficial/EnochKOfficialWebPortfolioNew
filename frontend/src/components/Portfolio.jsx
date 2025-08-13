@@ -40,8 +40,10 @@ function Navbar({ active, onNavClick }) {
   };
   const onClick = (e, id) => {
     e.preventDefault();
+    // Start manual highlight lock BEFORE scrolling so observer won't override
     if (onNavClick) onNavClick(id);
-    scrollToId(id);
+    // Defer scroll to next frame for consistency
+    requestAnimationFrame(() => scrollToId(id));
   };
 
   return (
