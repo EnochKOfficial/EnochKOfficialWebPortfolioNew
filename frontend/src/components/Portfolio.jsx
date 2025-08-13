@@ -429,8 +429,12 @@ export default function Portfolio() {
           ...prev,
           profile: profileRes || prev.profile,
           projects: Array.isArray(projectsRes) && projectsRes.length ? projectsRes : prev.projects,
-          writing: writingRes || prev.writing,
-          education: educationRes || prev.education,
+          writing: (writingRes && Array.isArray(writingRes.worksInProgress) && writingRes.worksInProgress.length > 0)
+            ? writingRes
+            : prev.writing,
+          education: (educationRes && educationRes.current)
+            ? educationRes
+            : prev.education,
         }));
       } catch (e) {
         // Keep mock on any failure
