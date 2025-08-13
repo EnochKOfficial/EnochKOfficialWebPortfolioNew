@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "../c
 import "../styles/portfolio.css";
 import useScrollSpy from "../hooks/useScrollSpy";
 import Particles from "./Particles";
+import { getProfile, getProjects, getWriting, getEducation, postContactMessage } from "../lib/api";
 
 const SECTIONS = [
   { id: "about", label: "About" },
@@ -86,7 +87,7 @@ function Navbar({ active }) {
   );
 }
 
-function Hero() {
+function Hero({ profile, skills, goals }) {
   const phrases = useMemo(
     () => [
       "Aspiring AI/ML Engineer",
@@ -104,7 +105,6 @@ function Hero() {
 
   return (
     <section className="relative min-h-[88vh] flex items-center bg-black text-zinc-200 overflow-hidden">
-      {/* Decorative blurred blobs + moving particles */}
       <div className="abs-blur blur-1"></div>
       <div className="abs-blur blur-2"></div>
       <div className="abs-blur blur-3"></div>
@@ -116,16 +116,16 @@ function Hero() {
           <div>
             <div className="uppercase text-xs text-zinc-400 tracking-[0.2em] mb-4">Portfolio</div>
             <h1 className="font-instrument text-5xl sm:text-6xl lg:text-7xl leading-[0.95] text-white animate-fadeIn">
-              Enoch K.
+              {profile?.name || "Enoch K."}
             </h1>
             <div className="mt-3 text-sm text-zinc-400 flex items-center gap-2">
               <Hash size={16}/> <span className="italic fade-cycle">{phrases[idx]}</span>
             </div>
             <p className="text-zinc-300 mt-5 max-w-xl">
-              Student at CMR National PU College — I build with HTML &amp; CSS, learning JavaScript, Python and SQL. I compose music and explore mathematics, while dreaming of AI/ML and Archaeology.
+              {profile?.summary || "Student at CMR National PU College — I build with HTML & CSS, learning JavaScript, Python and SQL. I compose music and explore mathematics, while dreaming of AI/ML and Archaeology."}
             </p>
             <div className="mt-6 flex flex-wrap gap-2 text-xs text-zinc-400">
-              {portfolioMock.skills.web.map((s) => (
+              {skills.web.map((s) => (
                 <span key={s} className="inline-flex items-center gap-1"><Code2 size={14}/> {s}</span>
               ))}
             </div>
@@ -151,7 +151,7 @@ function Hero() {
                   I love history and discovering stories hidden in the earth. My math explorations include Interoch Number Theory and Square Familia.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {portfolioMock.goals.map((g) => (
+                  {goals.map((g) => (
                     <Badge key={g} className="bg-[#7c3aed]/20 text-[#d1c7ff] border-[#7c3aed]/40">{g}</Badge>
                   ))}
                 </div>
@@ -161,7 +161,6 @@ function Hero() {
         </div>
       </div>
 
-      {/* Subtle ribbon */}
       <div className="hero-ribbon">Learn • Build • Compose • Explore</div>
     </section>
   );
@@ -179,14 +178,14 @@ function SectionHeading({ icon: Icon, title, subtitle }) {
   );
 }
 
-function ProjectsSection() {
-  const { projects } = portfolioMock;
+function ProjectsSection({ data }) {
+  const items = data.projects;
   return (
     <section id="projects" className="section">
       <div className="section-decor bg-math" aria-hidden="true"></div>
       <SectionHeading icon={Code2} title="Projects &amp; Math Ideas" subtitle="Highlights" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((p) => (
+        {items.map((p) => (
           <Card key={p.id} className="bg-[#0f0f14]/60 border-[#7c3aed]/30 hover:border-[#7c3aed]/60 transition-colors">
             <CardHeader>
               <CardTitle className="text-white flex items-center justify-between">
@@ -198,7 +197,7 @@ function ProjectsSection() {
               <p>{p.blurb}</p>
               <p className="text-zinc-400">{p.details}</p>
               <div className="flex flex-wrap gap-2">
-                {p.tags.map((t) => (
+                {(p.tags || []).map((t) => (
                   <Badge key={t} className="bg-[#1a132b] text-[#d1c7ff] border-[#7c3aed]/40">{t}</Badge>
                 ))}
               </div>
@@ -229,21 +228,21 @@ function MusicSection() {
   );
 }
 
-function WritingSection() {
-  const { writing } = portfolioMock;
+function WritingSection({ data }) {
+  const w = data.writing;
   return (
     <section id="writing" className="section">
       <div className="section-decor bg-writing-letters" aria-hidden="true"></div>
       <SectionHeading icon={Book} title="Writing" subtitle="Works in progress" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {writing.worksInProgress.map((w) => (
-          <Card key={w.id} className="bg-[#0f0f14]/60 border-[#7c3aed]/30">
+        {(w.worksInProgress || []).map((item) => (
+          <Card key={item.id} className="bg-[#0f0f14]/60 border-[#7c3aed]/30">
             <CardHeader>
-              <CardTitle className="text-white">{w.title}</CardTitle>
+              <CardTitle className="text-white">{item.title}</CardTitle>
             </CardHeader>
             <CardContent className="text-zinc-300 text-sm space-y-2">
-              <p className="text-zinc-400">{w.type} — {w.status}</p>
-              <p>{w.notes}</p>
+              <p className="text-zinc-400">{item.type} — {item.status}</p>
+              <p>{item.notes}</p>
             </CardContent>
           </Card>
         ))}
@@ -252,25 +251,25 @@ function WritingSection() {
   );
 }
 
-function EducationSection() {
-  const { education } = portfolioMock;
+function EducationSection({ data }) {
+  const edu = data.education;
   return (
     <section id="education" className="section">
       <div className="section-decor bg-education-caps" aria-hidden="true"></div>
       <SectionHeading icon={GraduationCap} title="Education" subtitle="Current" />
       <Card className="bg-[#0f0f14]/60 border-[#7c3aed]/30">
         <CardContent className="pt-6 text-zinc-300">
-          <div className="font-medium text-white">{education.current.institution}</div>
-          <div className="text-zinc-400 text-sm">{education.current.standard} • {education.current.year}</div>
-          <p className="mt-3">{education.current.notes}</p>
+          <div className="font-medium text-white">{edu.current?.institution}</div>
+          <div className="text-zinc-400 text-sm">{edu.current?.standard} • {edu.current?.year}</div>
+          <p className="mt-3">{edu.current?.notes}</p>
         </CardContent>
       </Card>
     </section>
   );
 }
 
-function AboutSection() {
-  const { profile, skills } = portfolioMock;
+function AboutSection({ data }) {
+  const { profile, skills } = data;
   return (
     <section id="about" className="section">
       <SectionHeading icon={Code2} title="About Me" subtitle="Intro" />
@@ -294,12 +293,12 @@ function AboutSection() {
           </CardHeader>
           <CardContent className="text-zinc-300 space-y-3">
             <div className="flex flex-wrap gap-2">
-              {skills.music.map((s) => (
+              {data.skills.music.map((s) => (
                 <Badge key={s} className="bg-[#1a132b] text-[#d1c7ff] border-[#7c3aed]/40">{s}</Badge>
               ))}
             </div>
             <div className="flex flex-wrap gap-2">
-              {skills.interests.map((s) => (
+              {data.skills.interests.map((s) => (
                 <Badge key={s} className="bg-[#1a132b] text-[#d1c7ff] border-[#7c3aed]/40">{s}</Badge>
               ))}
             </div>
@@ -330,6 +329,8 @@ function ContactSection() {
       fd.append("message", form.message);
       const res = await fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { Accept: "application/json" } });
       if (res.ok) {
+        // Store a DB copy (non-blocking)
+        postContactMessage({ name: form.name, email: form.email, message: form.message }).catch(() => {});
         toast({ title: "Message sent", description: "Thanks! I will get back soon." });
         setForm({ name: "", email: "", message: "" });
       } else {
@@ -347,7 +348,7 @@ function ContactSection() {
 
   return (
     <section id="contact" className="section">
-      <SectionHeading icon={Send} title="Contact" subtitle="Let\'s connect" />
+      <SectionHeading icon={Send} title="Contact" subtitle="Let's connect" />
       <Card className="bg-[#0f0f14]/60 border-[#7c3aed]/30">
         <CardContent className="pt-6">
           <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-zinc-200">
@@ -371,7 +372,7 @@ function ContactSection() {
           </form>
         </CardContent>
       </Card>
-      <p className="text-xs text-zinc-500 mt-3">Note: Form submits to Formspree. If network fails, it's saved locally.</p>
+      <p className="text-xs text-zinc-500 mt-3">Note: Form submits to Formspree and stores a copy in database; if network fails, saved locally.</p>
     </section>
   );
 }
@@ -393,19 +394,16 @@ function Footer() {
 
 export default function Portfolio() {
   const active = useScrollSpy(SECTIONS.map((s) => s.id));
-  return (
-    <div className="bg-black text-zinc-200 font-rethink">
-      <Navbar active={active} />
-      <Hero />
-      <main className="mx-auto max-w-6xl px-4">
-        <AboutSection />
-        <ProjectsSection />
-        <MusicSection />
-        <WritingSection />
-        <EducationSection />
-        <ContactSection />
-      </main>
-      <Footer />
-    </div>
-  );
-}
+
+  // State defaults to mock; updates from backend when available
+  const [data, setData] = React.useState({
+    profile: portfolioMock.profile,
+    skills: portfolioMock.skills,
+    goals: portfolioMock.goals,
+    projects: portfolioMock.projects,
+    writing: portfolioMock.writing,
+    education: portfolioMock.education,
+  });
+
+  React.useEffect(() => {
+    let cancelled = False
