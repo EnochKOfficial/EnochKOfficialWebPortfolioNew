@@ -209,7 +209,7 @@ def main():
     """Run all backend tests"""
     print("=" * 60)
     print("BACKEND API TESTING VIA INGRESS")
-    print("Testing URL: http://localhost:3000/api/*")
+    print("Testing URL: https://886d98c7-2869-4b2e-8481-b4582afa4fc9.preview.emergentagent.com/api/*")
     print("=" * 60)
     
     results = []
