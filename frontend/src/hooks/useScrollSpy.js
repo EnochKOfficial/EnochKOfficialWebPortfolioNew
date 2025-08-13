@@ -3,7 +3,8 @@ import React from "react";
 export default function useScrollSpy(ids = [], options = {}) {
   const [active, setActive] = React.useState(ids[0] || null);
   const [manual, setManual] = React.useState({ id: null, until: 0 });
-  const rootMargin = options.rootMargin || "-28% 0px -60% 0px";
+  // Bias the active section toward the region below the sticky navbar.
+  const rootMargin = options.rootMargin || "-35% 0px -50% 0px";
   const threshold = options.threshold || [0, 0.1, 0.25, 0.5, 0.75, 1];
 
   const isManual = () => manual.until > Date.now();
