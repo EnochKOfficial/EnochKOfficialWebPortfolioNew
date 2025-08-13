@@ -22,12 +22,12 @@ const SECTIONS = [
   { id: "contact", label: "Contact" },
 ];
 
-function Navbar({ active }) {
+function Navbar({ active, onNavClick }) {
   const scrollToId = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
     try {
-      const y = el.getBoundingClientRect().top + window.pageYOffset - 80; // offset for sticky nav
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
       window.scrollTo({ top: y, behavior: "smooth" });
       if (window.history && window.history.replaceState) {
         window.history.replaceState(null, "", `#${id}`);
@@ -40,6 +40,7 @@ function Navbar({ active }) {
   };
   const onClick = (e, id) => {
     e.preventDefault();
+    if (onNavClick) onNavClick(id);
     scrollToId(id);
   };
 
@@ -97,15 +98,12 @@ function Navbar({ active }) {
 }
 
 function Hero({ profile, skills, goals }) {
-  const phrases = useMemo(
-    () => [
-      "Aspiring AI/ML Engineer",
-      "Young Math Explorer",
-      "Keyboard & Piano Player",
-      "Future Archaeologist",
-    ],
-    []
-  );
+  const phrases = useMemo(() => [
+    "Aspiring AI/ML Engineer",
+    "Young Math Explorer",
+    "Keyboard & Piano Player",
+    "Future Archaeologist",
+  ], []);
   const [idx, setIdx] = useState(0);
   React.useEffect(() => {
     const t = setInterval(() => setIdx((p) => (p + 1) % phrases.length), 2200);
@@ -338,7 +336,6 @@ function ContactSection() {
       fd.append("message", form.message);
       const res = await fetch(FORM_ENDPOINT, { method: "POST", body: fd, headers: { Accept: "application/json" } });
       if (res.ok) {
-        // Store a DB copy (non-blocking)
         postContactMessage({ name: form.name, email: form.email, message: form.message }).catch(() => {});
         toast({ title: "Message sent", description: "Thanks! I will get back soon." });
         setForm({ name: "", email: "", message: "" });
@@ -347,7 +344,6 @@ function ContactSection() {
         toast({ title: "Send failed", description: data?.error || "Please try again later." });
       }
     } catch (err) {
-      // Fallback to local save if network blocked
       saveMockMessage({ ...form });
       toast({ title: "Saved locally", description: "Network issue; stored in your browser for now." });
     } finally {
@@ -402,9 +398,8 @@ function Footer() {
 }
 
 export default function Portfolio() {
-  const active = useScrollSpy(SECTIONS.map((s) => s.id));
+  const { active, startManual } = useScrollSpy(SECTIONS.map((s) => s.id));
 
-  // State defaults to mock; updates from backend when available
   const [data, setData] = React.useState({
     profile: portfolioMock.profile,
     skills: portfolioMock.skills,
@@ -429,16 +424,10 @@ export default function Portfolio() {
           ...prev,
           profile: profileRes || prev.profile,
           projects: Array.isArray(projectsRes) && projectsRes.length ? projectsRes : prev.projects,
-          writing: (writingRes && Array.isArray(writingRes.worksInProgress) && writingRes.worksInProgress.length > 0)
-            ? writingRes
-            : prev.writing,
-          education: (educationRes && educationRes.current)
-            ? educationRes
-            : prev.education,
+          writing: (writingRes && Array.isArray(writingRes.worksInProgress) && writingRes.worksInProgress.length > 0) ? writingRes : prev.writing,
+          education: (educationRes && educationRes.current) ? educationRes : prev.education,
         }));
-      } catch (e) {
-        // Keep mock on any failure
-      }
+      } catch {}
     };
     load();
     return () => { cancelled = true; };
@@ -446,7 +435,7 @@ export default function Portfolio() {
 
   return (
     <div className="bg-black text-zinc-200 font-rethink">
-      <Navbar active={active} />
+      <Navbar active={active} onNavClick={(id)=>startManual(id)} />
       <Hero profile={data.profile} skills={data.skills} goals={data.goals} />
       <main className="mx-auto max-w-6xl px-4">
         <AboutSection data={{ profile: data.profile, skills: data.skills }} />

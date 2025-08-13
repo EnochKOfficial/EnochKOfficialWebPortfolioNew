@@ -2,14 +2,16 @@ import React from "react";
 
 export default function useScrollSpy(ids = [], options = {}) {
   const [active, setActive] = React.useState(ids[0] || null);
-  const opts = React.useMemo(
-    () => ({
-      root: null,
-      rootMargin: options.rootMargin || "-30% 0px -60% 0px",
-      threshold: options.threshold || [0, 0.1, 0.25, 0.5, 0.75, 1],
-    }),
-    [options.rootMargin, options.threshold]
-  );
+  const [manual, setManual] = React.useState({ id: null, until: 0 });
+  const rootMargin = options.rootMargin || "-28% 0px -60% 0px";
+  const threshold = options.threshold || [0, 0.1, 0.25, 0.5, 0.75, 1];
+
+  const isManual = () => manual.until > Date.now();
+
+  const startManual = (id, ms = 1400) => {
+    setManual({ id, until: Date.now() + ms });
+    setActive(id);
+  };
 
   React.useEffect(() => {
     const sections = ids
@@ -18,16 +20,20 @@ export default function useScrollSpy(ids = [], options = {}) {
     if (!sections.length) return;
 
     const observer = new IntersectionObserver((entries) => {
-      // Pick the entry with highest intersectionRatio that is intersecting
+      // Skip observer updates during manual highlight window
+      if (isManual()) return;
       const visible = entries
         .filter((e) => e.isIntersecting)
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (visible?.target?.id) setActive(visible.target.id);
-    }, opts);
+    }, { root: null, rootMargin, threshold });
 
     sections.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [ids.join("|"), opts]);
+  }, [ids.join("|"), rootMargin, JSON.stringify(threshold)]);
 
-  return active;
+  // Expose currently effective active id
+  const effectiveActive = isManual() ? manual.id : active;
+
+  return { active: effectiveActive, startManual };
 }
