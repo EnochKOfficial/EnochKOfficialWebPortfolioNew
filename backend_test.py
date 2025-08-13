@@ -10,7 +10,8 @@ import sys
 from datetime import datetime
 
 # Base URL for API testing via ingress
-BASE_URL = "http://localhost:3000/api"
+# Using the external URL from frontend/.env as localhost:3000 routing is not working
+BASE_URL = "https://886d98c7-2869-4b2e-8481-b4582afa4fc9.preview.emergentagent.com/api"
 
 def test_hello_world():
     """Test GET /api/ endpoint"""
