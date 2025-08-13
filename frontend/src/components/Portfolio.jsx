@@ -406,4 +406,44 @@ export default function Portfolio() {
   });
 
   React.useEffect(() => {
-    let cancelled = False
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const [profileRes, projectsRes, writingRes, educationRes] = await Promise.all([
+          getProfile().catch(() => null),
+          getProjects().catch(() => null),
+          getWriting().catch(() => null),
+          getEducation().catch(() => null),
+        ]);
+        if (cancelled) return;
+        setData((prev) => ({
+          ...prev,
+          profile: profileRes || prev.profile,
+          projects: Array.isArray(projectsRes) && projectsRes.length ? projectsRes : prev.projects,
+          writing: writingRes || prev.writing,
+          education: educationRes || prev.education,
+        }));
+      } catch (e) {
+        // Keep mock on any failure
+      }
+    };
+    load();
+    return () => { cancelled = true; };
+  }, []);
+
+  return (
+    <div className="bg-black text-zinc-200 font-rethink">
+      <Navbar active={active} />
+      <Hero profile={data.profile} skills={data.skills} goals={data.goals} />
+      <main className="mx-auto max-w-6xl px-4">
+        <AboutSection data={{ profile: data.profile, skills: data.skills }} />
+        <ProjectsSection data={{ projects: data.projects }} />
+        <MusicSection />
+        <WritingSection data={{ writing: data.writing }} />
+        <EducationSection data={{ education: data.education }} />
+        <ContactSection />
+      </main>
+      <Footer />
+    </div>
+  );
+}
